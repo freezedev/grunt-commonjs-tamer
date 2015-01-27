@@ -1,0 +1,50 @@
+{
+  "name": "grunt-commonjs-tamer",
+  "description": "Tame your CommonJS modules",
+  "version": "0.1.0",
+  "homepage": "https://github.com/freezedev/grunt-commonjs-tamer",
+  "author": {
+    "name": "Johannes Stein",
+    "email": "johannesstein@freeze-dev.com",
+    "url": "http://www.freeze-dev.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/freezedev/grunt-commonjs-tamer.git"
+  },
+  "bugs": {
+    "url": "https://github.com/freezedev/grunt-commonjs-tamer/issues"
+  },
+  "licenses": [
+    {
+      "type": "Public domain",
+      "url": "https://github.com/freezedev/grunt-commonjs-tamer/blob/master/LICENSE"
+    }
+  ],
+  "main": "Gruntfile.js",
+  "engines": {
+    "node": ">= 0.8.0"
+  },
+  "scripts": {
+    "test": "grunt test"
+  },
+  "devDependencies": {
+    "grunt-contrib-jshint": "~0.7.0",
+    "grunt-contrib-clean": "~0.5.0",
+    "grunt-contrib-nodeunit": "~0.2.0",
+    "grunt": "~0.4.2",
+    "grunt-release": "~0.6.0"
+  },
+  "peerDependencies": {
+    "grunt": "~0.4.2"
+  },
+  "keywords": [
+    "gruntplugin",
+    "commonjs",
+    "cjs",
+    "modules"
+  ],
+  "dependencies": {
+    "grunt-concat-sourcemap": "~0.4.0"
+  }
+}
