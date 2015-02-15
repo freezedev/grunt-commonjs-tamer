@@ -76,7 +76,9 @@ module.exports = function(grunt) {
         options.separator + source + options.separator + '});';
         
         if (options.beautify) {
-          source = beautify(source);
+          source = beautify(source, {
+            indent_size: 2
+          });
         }
 
         return source;
