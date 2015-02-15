@@ -7,7 +7,7 @@
 'use strict';
 
 var path = require('path');
-
+var beautify = require('js-beautify').js_beautify;
 
 module.exports = function(grunt) {
 
@@ -19,7 +19,7 @@ module.exports = function(grunt) {
     var options = this.options({
       register: 'require.register',
       separator: grunt.util.linefeed,
-      indent: '\t',
+      beautify: true,
       normalizeIndexFile: true,
       base: null,
       namespace: null,
@@ -49,7 +49,6 @@ module.exports = function(grunt) {
         // Read file source.
         var source = grunt.file.read(filepath);
         var extension = path.extname(filepath);
-        var isCoffeeScript = (extension === '.coffee');
         
         var moduleName = filepath.split(extension)[0];
         if (options.base && moduleName.indexOf(options.base) === 0) {
@@ -71,31 +70,17 @@ module.exports = function(grunt) {
         }
         
         moduleName = options.processName(moduleName, path.basename(moduleName));
-
         
-        if (isCoffeeScript) {
-          // Do coffee magic here
+
+        source = options.register + '(\'' + moduleName + '\', function(require, module, exports) {' +
+        options.separator + source + options.separator + '});';
+        
+        if (options.beautify) {
+          source = beautify(source);
         }
-
-        /*source = source.solit('\n').map(function(line) {
-          return options.indent + line;
-        });*/
-
-        source = options.register + '(\'' + moduleName + '\', function(require, module, exports) {'
-        + options.separator + source + options.separator + '});';
 
         return source;
       }).join(grunt.util.normalizelf(options.separator));
-      
-      /*var modules = options.modules;
-      
-      var moduleKeys = Object.keys(modules);
-      
-      for (var i = 0, j = moduleKeys.length; i < j; i++) {
-        (function(key, value) {
-          src += 'define(' + quotes + key + quotes + ', ' + value.toString() + ');';
-        })(moduleKeys[i], modules[moduleKeys[i]]);
-      }*/
 
       // Write the destination file.
       grunt.file.write(f.dest, src);
