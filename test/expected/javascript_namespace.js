@@ -1,54 +1,36 @@
-define('test/a/b/file', ['a', 'b'], function(a, b) {
-  return a + b;
-});
+require.register('test/a/b/file', function(require, module, exports) {
+  var a = require('a');
+  var b = require('b');
 
-define('test/a/b', function() {
-  return {
+  module.exports = a + b;
+});
+require.register('test/a/b', function(require, module, exports) {
+  exports = {
     a: 4,
     b: 6
   };
 });
+require.register('test/a/file', function(require, module, exports) {
+  var a = require('a');
+  var b = require('b');
 
-define('named1', function() {
-  return "it's alive!";
+  module.exports = a + b;
 });
-
-define('named2', ['b'], function() {
-  return "it's alive!";
-});
-define('test/a/file', ['a', 'b'], function(a, b) {
-  return a + b;
-});
-
-define('test/a', function() {
-  return {
+require.register('test/a', function(require, module, exports) {
+  exports = {
     a: 4,
     b: 6
   };
 });
+require.register('test/file', function(require, module, exports) {
+  var a = require('a');
+  var b = require('b');
 
-define('named1', function() {
-  return "it's alive!";
+  module.exports = a + b;
 });
-
-define('named2', ['b'], function() {
-  return "it's alive!";
-});
-define('test/file', ['a', 'b'], function(a, b) {
-  return a + b;
-});
-
-define('test', function() {
-  return {
+require.register('test', function(require, module, exports) {
+  exports = {
     a: 4,
     b: 6
   };
-});
-
-define('named1', function() {
-  return "it's alive!";
-});
-
-define('named2', ['b'], function() {
-  return "it's alive!";
 });

@@ -1,6 +1,4 @@
-define(function() {
-  return {
-    a: 4,
-    b: 6
-  };
-});
+exports = {
+  a: 4,
+  b: 6
+};

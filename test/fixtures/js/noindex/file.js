@@ -1,3 +1,4 @@
-define(['a', 'b'], function(a, b) {
-  return a + b;
-});
+var a = require('a');
+var b = require('b');
+
+module.exports = a + b;

@@ -1,4 +1,2 @@
-define({
-  c: 3,
-  d: 5
-});
+exports.c = 3;
+exports.d = 5;

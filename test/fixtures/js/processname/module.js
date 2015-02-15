@@ -1,3 +1,5 @@
-define(['a', 'b', 'c'], function() {
-  return 5;
-});
+var a = require('a');
+var b = require('b');
+var c = require('c');
+
+module.exports = 5;

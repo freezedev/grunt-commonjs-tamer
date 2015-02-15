@@ -1,3 +1,3 @@
-define(['folder/submodule'], function() {
-  return 10;
-});
+var submodule = require('folder/submodule');
+
+module.exports = 10;

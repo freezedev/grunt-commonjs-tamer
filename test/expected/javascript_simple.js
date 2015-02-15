@@ -1,19 +1,16 @@
-define('folder', ['folder/submodule'], function() {
-  return 10;
-});
+require.register('folder', function(require, module, exports) {
+  var submodule = require('folder/submodule');
 
-define('folder/submodule', {
-  c: 3,
-  d: 5
+  module.exports = 10;
 });
+require.register('folder/submodule', function(require, module, exports) {
+  exports.c = 3;
+  exports.d = 5;
+});
+require.register('module', function(require, module, exports) {
+  var a = require('a');
+  var b = require('b');
+  var c = require('c');
 
-define('module', ['a', 'b', 'c'], function() {
-  return 5;
-});
-define('named1', function() {
-  return "it's alive!";
-});
-
-define('named2', ['b'], function() {
-  return "it's alive!";
+  module.exports = 5;
 });
