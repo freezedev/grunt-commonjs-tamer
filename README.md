@@ -9,6 +9,8 @@ grunt-commonjs-tamer
 This module helps you manage your CommonJS modules to be used in the browser.  
 In a way it's similar to browserify, but `grunt-commonjs-tamer` allows for more fine-grained control.
 
+Are you rather working with AMD modules? Check out [grunt-amd-tamer](http://github.com/freezedev/grunt-amd-tamer)
+
 ## Getting Started
 This plugin requires Grunt `^0.4.5`
 
