@@ -8,6 +8,7 @@
 
 var path = require('path');
 var beautify = require('js-beautify').js_beautify;
+var coffeeFormatter = require('coffee-formatter');
 
 module.exports = function(grunt) {
 
@@ -24,20 +25,34 @@ module.exports = function(grunt) {
       base: null,
       namespace: null,
       sourcemap: true,
-      processName: function(name) {
+      processName: function(name /*, basename */) {
         return name;
       },
-      process: function() {
-
+      process: function(content /*, moduleName */) {
+        return content;
       },
-      blacklist: []
+      blacklist: [],
+      banner: '',
+      footer: ''
     });
 
+    var quotes = (options.doubleQuotes) ? '"' : '\'';
+    
     // Iterate over all specified file groups.
     this.files.forEach(function(f) {
       
+      var src = '';
+
+      if (options.banner) {
+        if (typeof options.banner === 'function') {
+          src += options.banner(f.dest);
+        } else {
+          src += options.banner;
+        }
+      }
+      
       // Concat specified files.
-      var src = f.src.filter(function(filepath) {
+      src = f.src.filter(function(filepath) {
         // Warn on and remove invalid source files (if nonull was set).
         if (!grunt.file.exists(filepath)) {
           grunt.log.warn('Source file "' + filepath + '" not found.');
@@ -49,6 +64,8 @@ module.exports = function(grunt) {
         // Read file source.
         var source = grunt.file.read(filepath);
         var extension = path.extname(filepath);
+        
+        var isCoffeeScript = extension === '.coffee';
         
         var moduleName = filepath.split(extension)[0];
         if (options.base && moduleName.indexOf(options.base) === 0) {
@@ -71,28 +88,53 @@ module.exports = function(grunt) {
         
         moduleName = options.processName(moduleName, path.basename(moduleName));
         
-        var quotes = (options.doubleQuotes) ? '"' : '\'';
-
-        source = options.register + '(' + quotes + moduleName + quotes + ', function(require, module, exports) {' +
-        options.separator + source + options.separator + '});';
+        if (options.blacklist.indexOf(moduleName) >= 0) {
+          return;
+        }
+        
+        if (isCoffeeScript) {
+          source = options.register + ' ' + quotes + moduleName + quotes + ', (require, module, exports) ->' +
+          options.separator + (function(s) {
+            return s.split(options.separator).map(function(l) {
+              return '\t' + l;
+            }).join(options.separator);
+          })(source) + options.separator + options.separator;
+        } else {
+          source = options.register + '(' + quotes + moduleName + quotes + ', function(require, module, exports) {' +
+          options.separator + source + options.separator + '});';
+        }
         
         if (options.beautify) {
-          var beautifyOptions = {};
-          
-          if (typeof options.beautify === 'options') {
-            beautifyOptions = options.beautify;
+          if (!isCoffeeScript) {
+            var beautifyOptions = {};
+
+            if (typeof options.beautify === 'object') {
+              beautifyOptions = options.beautify;
+            } else {
+              beautifyOptions = {
+                indent_size: 2
+              };
+            }
+
+            source = beautify(source, beautifyOptions);
           } else {
-            beautifyOptions = {
-              indent_size: 2
-            };
+            source = coffeeFormatter.formatTwoSpaceOperator(source);
           }
-          
-          source = beautify(source, beautifyOptions);
         }
+        
+        source = options.process(source, moduleName);
 
         return source;
       }).join(grunt.util.normalizelf(options.separator));
 
+      if (options.footer) {
+        if (typeof options.footer === 'function') {
+          src += options.footer(f.dest);
+        } else {
+          src += options.footer;
+        }
+      }
+      
       // Write the destination file.
       grunt.file.write(f.dest, src);
 
