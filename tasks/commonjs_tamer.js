@@ -9,6 +9,7 @@
 var path = require('path');
 var beautify = require('js-beautify').js_beautify;
 var coffeeFormatter = require('coffee-formatter');
+var SourceMapConcat = require('sourcemap-concat').SourceMapConcatenator;
 
 module.exports = function(grunt) {
 
@@ -40,6 +41,8 @@ module.exports = function(grunt) {
     
     // Iterate over all specified file groups.
     this.files.forEach(function(f) {
+
+      var sourceMapConcat = new SourceMapConcat({file: f.dest});
       
       var src = '';
 
@@ -123,6 +126,41 @@ module.exports = function(grunt) {
         }
         
         source = options.process(source, moduleName);
+
+        if (options.sourceMap) {
+          var prevSourceMap;
+          var sourceMapFile = filepath + '.map';
+          var file;
+
+          var sourceMapComment = '//# sourceMappingURL=';
+          var hasSourceMap = source.indexOf(sourceMapComment) >= 0;
+
+          if (hasSourceMap) {
+            var smMatch = source.match(/\/\# sourceMappingURL=(.*)/);
+            file = smMatch[1];
+
+            var basename = path.basename(filepath);
+            var sourceMapPath = filepath.split(basename)[0];
+
+            sourceMapFile = [sourceMapPath, file].join(path.sep);
+          }
+
+          if (grunt.file.exists(sourceMapFile)) {
+            prevSourceMap = grunt.file.readJSON(sourceMapFile);
+          }
+
+          if (hasSourceMap) {
+            source = source.split(sourceMapComment + file)[0];
+          }
+
+          var fileSource = source;
+
+          if (index !== filtered.length - 1 && !prevSourceMap) {
+            fileSource += grunt.util.normalizelf(options.separator);
+          }
+
+          sourceMapConcat.add(filepath, source, prevSourceMap);
+        }
 
         return source;
       }).join(grunt.util.normalizelf(options.separator));
