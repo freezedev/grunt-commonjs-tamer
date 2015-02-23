@@ -41,9 +41,11 @@
     "gruntplugin",
     "commonjs",
     "cjs",
+    "module",
     "modules"
   ],
   "dependencies": {
+    "coffee-formatter": "^0.1.1",
     "grunt-concat-sourcemap": "~0.4.0",
     "js-beautify": "^1.5.4"
   }
