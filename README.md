@@ -70,11 +70,34 @@ Default value: `grunt.util.linefeed`
 
 The separator between files. Usually, you don't need to change this
 
+#### options.register
+Type: `String`
+Default value: `require.register`
+
+The function where modules will be registered to.
+```js
+require.register(function() {
+  // Module content here
+});
+```
+
 #### options.normalizeIndexFile
 Type: `Boolean`
 Default value: `true`
 
 Normalizes the index file, which is defauöt CommonJS behavior with `index.js` files. A file with `index.js` as its filename will resolve to its parent folder, e.g. a module named `folder/index` will become `folder`.
+
+#### options.beautify
+Type: `Boolean` or `Object`
+Default value: true
+
+Beautifies the resulting file(s) using `js-beautify.` If it's an object, it will be directly passed into the beautifier,
+if it's a boolean these values will be used:
+```js
+{
+  indent_size: 2
+}
+```
 
 #### options.base
 Type: `String`

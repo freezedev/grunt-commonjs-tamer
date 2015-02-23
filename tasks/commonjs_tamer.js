@@ -71,14 +71,23 @@ module.exports = function(grunt) {
         
         moduleName = options.processName(moduleName, path.basename(moduleName));
         
+        var quotes = (options.doubleQuotes) ? '"' : '\'';
 
-        source = options.register + '(\'' + moduleName + '\', function(require, module, exports) {' +
+        source = options.register + '(' + quotes + moduleName + quotes + ', function(require, module, exports) {' +
         options.separator + source + options.separator + '});';
         
         if (options.beautify) {
-          source = beautify(source, {
-            indent_size: 2
-          });
+          var beautifyOptions = {};
+          
+          if (typeof options.beautify === 'options') {
+            beautifyOptions = options.beautify;
+          } else {
+            beautifyOptions = {
+              indent_size: 2
+            };
+          }
+          
+          source = beautify(source, beautifyOptions);
         }
 
         return source;
