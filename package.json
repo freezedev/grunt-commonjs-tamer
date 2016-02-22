@@ -1,7 +1,7 @@
 {
   "name": "grunt-commonjs-tamer",
   "description": "Tame your CommonJS modules",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "homepage": "https://github.com/freezedev/grunt-commonjs-tamer",
   "author": {
     "name": "Johannes Stein",
